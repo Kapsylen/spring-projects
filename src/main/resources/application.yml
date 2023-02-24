@@ -1,0 +1,7 @@
+spring:
+  data:
+    mongodb:
+      uuid-representation: standard
+      port: 27017
+      database: mongodb
+
