@@ -4,4 +4,5 @@ spring:
       uuid-representation: standard
       port: 27017
       database: mongodb
-
+server:
+  port: 8081
