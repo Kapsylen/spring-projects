@@ -2,6 +2,7 @@ package com.example.springbootmongo.api;
 
 import com.example.springbootmongo.domain.Employee;
 import com.example.springbootmongo.domain.EmployeeServiceImpl;
+import com.example.springbootmongo.exception.EmployeeApiException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -29,9 +30,8 @@ public class EmployeeController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<Mono<Employee>> findEmpById(@PathVariable("id") String id) {
-        Mono<Employee> employee = employeeServiceImpl.findByEmpId(id);
-        return new ResponseEntity<>(employee, employee != null ? HttpStatus.OK : HttpStatus.NOT_FOUND);
+    public Mono<Employee> findEmpById(@PathVariable("id") String id) {
+        return employeeServiceImpl.findByEmpId(id);
     }
 
     @PutMapping("/update/emp")
@@ -43,6 +43,6 @@ public class EmployeeController {
     @DeleteMapping("/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable("id") String id) {
-        employeeServiceImpl.deleteEmp(id).subscribe();
+        employeeServiceImpl.deleteEmp(id);
     }
 }

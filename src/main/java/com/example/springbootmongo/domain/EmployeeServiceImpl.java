@@ -1,5 +1,7 @@
 package com.example.springbootmongo.domain;
 
+import com.example.springbootmongo.exception.EmployeeApiException;
+import com.example.springbootmongo.exception.EmployeeNotFoundException;
 import com.example.springbootmongo.infrastructure.EmployeeRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +23,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     public Mono<Employee> findByEmpId(String id) {
-        return employeeRepo.findById(id);
+        return employeeRepo.findById(id)
+             .switchIfEmpty(Mono.error(new EmployeeNotFoundException("Not found: " + id)));
+
     }
 
     public Flux<Employee> findAllEmp() {

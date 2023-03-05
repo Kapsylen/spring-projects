@@ -2,6 +2,8 @@ package com.example.springbootmongo.api;
 
 import com.example.springbootmongo.domain.Employee;
 import com.example.springbootmongo.domain.EmployeeServiceImpl;
+import com.example.springbootmongo.exception.EmployeeApiException;
+import com.example.springbootmongo.exception.EmployeeNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,5 +52,14 @@ public class EmployeeControllerTest {
                 .isCreated();
     }
 
+    @Test
+    public void When_no_employee_were_found_Should_throw_EmployeeNotFoundException() {
+        var empId = UUID.randomUUID().toString();
+        when(employeeService.findByEmpId(empId)).thenReturn(Mono.error(new EmployeeNotFoundException("Not found: "+empId)));
+        webClient.get().uri("/get/" + empId)
+                .exchange()
+                .expectStatus()
+                .isNotFound();
+    }
 }
 
